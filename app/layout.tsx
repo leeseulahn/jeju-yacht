@@ -3,6 +3,7 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/pagination";
 import "./globals.css";
+import "./styles/design-system.css";
 import "./styles/yacht.css";
 import { AosProvider } from "@/components/AosProvider";
 import { eventInfo } from "@/lib/yacht/data";
@@ -24,6 +25,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ko">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+        />
+      </head>
       <body>
         <div className="yacht">
           <AosProvider />
