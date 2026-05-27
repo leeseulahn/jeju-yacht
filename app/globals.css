@@ -1,0 +1,7 @@
+/* Global CSS entrypoint */
+@import "./styles/base.css";
+
+html,
+body {
+  background: #04141f;
+}
