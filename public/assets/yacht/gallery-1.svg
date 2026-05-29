@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a2a43"/>
+      <stop offset="0.65" stop-color="#0f5e7a"/>
+      <stop offset="1" stop-color="#23a6b8"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.78" cy="0.26" r="0.4">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky)"/>
+  <circle cx="936" cy="208" r="120" fill="url(#sun)"/>
+  <g transform="translate(820,470) scale(1.6)" opacity="0.95">
+    <path d="M0,0 L0,-140 Q70,-90 60,0 Z" fill="#ffffff"/>
+    <path d="M6,0 L6,-120 Q-50,-70 -44,0 Z" fill="#ffffff" opacity="0.7"/>
+    <rect x="-46" y="0" width="112" height="10" rx="4" fill="#ffffff"/>
+  </g>
+  <g transform="translate(560,520) scale(1.05)" opacity="0.8">
+    <path d="M0,0 L0,-140 Q70,-90 60,0 Z" fill="#eaf6ff"/>
+    <path d="M6,0 L6,-120 Q-50,-70 -44,0 Z" fill="#eaf6ff" opacity="0.7"/>
+    <rect x="-46" y="0" width="112" height="10" rx="4" fill="#eaf6ff"/>
+  </g>
+  <g transform="translate(360,500) scale(0.7)" opacity="0.6">
+    <path d="M0,0 L0,-140 Q70,-90 60,0 Z" fill="#dff0fb"/>
+    <path d="M6,0 L6,-120 Q-50,-70 -44,0 Z" fill="#dff0fb" opacity="0.7"/>
+    <rect x="-46" y="0" width="112" height="10" rx="4" fill="#dff0fb"/>
+  </g>
+  <path d="M0,800 L0,560 L0,560.0 L40,570.6 L80,579.3 L120,584.7 L160,585.9 L200,582.5 L240,575.3 L280,565.4 L320,554.6 L360,544.7 L400,537.5 L440,534.1 L480,535.3 L520,540.7 L560,549.4 L600,560.0 L640,570.6 L680,579.3 L720,584.7 L760,585.9 L800,582.5 L840,575.3 L880,565.4 L920,554.6 L960,544.7 L1000,537.5 L1040,534.1 L1080,535.3 L1120,540.7 L1160,549.4 L1200,560.0 L1200,800 Z" fill="#0f5e7a" opacity="0.55"/>
+  <path d="M0,800 L0,610 L0,638.0 L40,640.0 L80,636.8 L120,629.0 L160,617.9 L200,605.4 L240,593.8 L280,584.9 L320,580.4 L360,581.0 L400,586.6 L440,596.3 L480,608.3 L520,620.6 L560,631.1 L600,638.0 L640,640.0 L680,636.8 L720,629.0 L760,617.9 L800,605.4 L840,593.8 L880,584.9 L920,580.4 L960,581.0 L1000,586.6 L1040,596.3 L1080,608.3 L1120,620.6 L1160,631.1 L1200,638.0 L1200,800 Z" fill="#0a2a43" opacity="0.6"/>
+  <path d="M0,800 L0,660 L0,691.1 L40,681.0 L80,667.3 L120,652.3 L160,638.7 L200,628.7 L240,624.2 L280,625.8 L320,633.4 L360,645.5 L400,660.2 L440,674.8 L480,686.9 L520,694.3 L560,695.8 L600,691.1 L640,681.0 L680,667.3 L720,652.3 L760,638.7 L800,628.7 L840,624.2 L880,625.8 L920,633.4 L960,645.5 L1000,660.2 L1040,674.8 L1080,686.9 L1120,694.3 L1160,695.8 L1200,691.1 L1200,800 Z" fill="#02131f" opacity="0.65"/>
+</svg>
