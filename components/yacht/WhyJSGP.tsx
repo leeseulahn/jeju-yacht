@@ -109,7 +109,12 @@ export function WhyJSGP() {
             </div>
             <ol className="y-whypin__progress" aria-hidden="true">
               {STEPS.map((_, i) => (
-                <li key={i} data-active={i === active} />
+                <li key={i} data-active={i === active}>
+                  <span className="y-whypin__progress-line" />
+                  <span className="font-en y-whypin__progress-num">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </li>
               ))}
             </ol>
           </div>

@@ -26,7 +26,14 @@ export function CoverScene() {
   return (
     <section id="hero" className="y-mhero" ref={ref}>
       <div className="y-mhero__video">
-        <video autoPlay muted loop playsInline preload="auto">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/assets/yacht/hero-poster.svg"
+        >
           <source src={HERO_VIDEO} type="video/mp4" />
         </video>
         <div className="y-mhero__veil" aria-hidden="true" />
