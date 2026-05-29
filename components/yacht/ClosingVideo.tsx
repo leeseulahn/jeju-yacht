@@ -7,7 +7,14 @@ const CLOSING_VIDEO =
 export function ClosingVideo() {
   return (
     <section className="y-closing" aria-label="Closing">
-      <video autoPlay muted loop playsInline preload="auto">
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        poster="/assets/yacht/gallery-3.svg"
+      >
         <source src={CLOSING_VIDEO} type="video/mp4" />
       </video>
       <div className="y-closing__veil" aria-hidden="true" />
