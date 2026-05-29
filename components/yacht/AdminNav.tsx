@@ -26,7 +26,7 @@ export function AdminNav() {
         <span className="y-logo__mark">⛵</span>
         <span style={{ fontSize: 14 }}>
           JSGP
-          <small style={{ display: "block", fontSize: 10, color: "var(--y-ink-dim)", letterSpacing: "0.2em" }}>
+          <small style={{ display: "block", fontSize: 10, color: "#888", letterSpacing: "0.2em" }}>
             ADMIN
           </small>
         </span>
@@ -41,13 +41,7 @@ export function AdminNav() {
             </Link>
           );
         })}
-        <button type="button" className="y-admin__nav-logout" onClick={logout}
-          style={{
-            display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", borderRadius: 12,
-            color: "var(--y-ink-soft)", fontWeight: 600, fontSize: 14, background: "transparent", border: 0,
-            width: "100%", textAlign: "left", marginTop: 8,
-          }}
-        >
+        <button type="button" className="y-admin__nav-logout" onClick={logout}>
           <Logout size={18} />
           로그아웃
         </button>
