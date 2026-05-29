@@ -1,181 +1,110 @@
 "use client";
 
 import Link from "next/link";
-import type { CSSProperties } from "react";
 import { useEffect, useRef } from "react";
 
-/* FLATTEN-style cover hero.
-   – Per-letter mask wipe in the title.
-   – Two inline media "windows" containing autoplay videos.
-   – The second window is the focus video. As the user scrolls the
-     cover out of view, the focus video grows from its inline rect to
-     fill the entire viewport (sticky + scroll-driven transform). */
+/* MYCEL-style cover hero.
+   – Five-panel image collage (LT / LB / CB / RT / RB).
+   – Headline overlaid at center with eyebrow + lead + CTA.
+   – Three "hotspots" (purple dots) with captions for editorial detail.
+   – On scroll-in: split-line reveal of the headline via CSS animation.
+*/
 
-const HERO_VIDEO_INLINE =
-  "https://assets.mixkit.co/videos/preview/mixkit-sailing-boat-crossing-the-ocean-7905-large.mp4";
-const HERO_VIDEO_FOCUS =
-  "https://assets.mixkit.co/videos/preview/mixkit-sunset-with-sailing-boats-2166-large.mp4";
+type Hotspot = {
+  top: string;
+  left: string;
+  label: string;
+  tone: "default" | "soft";
+};
 
-function Letters({
-  text,
-  base,
-  step = 70,
-}: {
-  text: string;
-  base: number;
-  step?: number;
-}) {
-  return (
-    <>
-      {Array.from(text).map((char, i) => (
-        <span
-          key={`${text}-${i}`}
-          className="y-cover__letter"
-          style={{ animationDelay: `${base + i * step}ms` } as CSSProperties}
-        >
-          {char}
-        </span>
-      ))}
-    </>
-  );
-}
+const PANELS = [
+  { className: "y-cover2__panel y-cover2__panel--lt", src: "/assets/yacht/gallery-2.svg", alt: "" },
+  { className: "y-cover2__panel y-cover2__panel--lb", src: "/assets/yacht/gallery-4.svg", alt: "" },
+  { className: "y-cover2__panel y-cover2__panel--cb", src: "/assets/yacht/gallery-1.svg", alt: "" },
+  { className: "y-cover2__panel y-cover2__panel--rt", src: "/assets/yacht/gallery-3.svg", alt: "" },
+  { className: "y-cover2__panel y-cover2__panel--rb", src: "/assets/yacht/gallery-5.svg", alt: "" },
+];
+
+const HOTSPOTS: Hotspot[] = [
+  { top: "26%", left: "18%", label: "한림항 출발", tone: "default" },
+  { top: "62%", left: "78%", label: "이호테우 피니시", tone: "default" },
+  { top: "44%", left: "52%", label: "메인 코스", tone: "soft" },
+];
 
 export function CoverScene() {
-  const stackRef = useRef<HTMLDivElement>(null);
-  const pinRef = useRef<HTMLDivElement>(null);
-  const coverRef = useRef<HTMLElement>(null);
-  const anchorRef = useRef<HTMLSpanElement>(null);
-  const focusRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
 
+  // Subtle parallax: as the user scrolls through the hero, panels drift
+  // at slightly different speeds. Editorial, not gimmicky.
   useEffect(() => {
-    const stack = stackRef.current;
-    const pin = pinRef.current;
-    const cover = coverRef.current;
-    const anchor = anchorRef.current;
-    const focus = focusRef.current;
-    if (!stack || !pin || !cover || !anchor || !focus) return;
-
+    const stage = stageRef.current;
+    if (!stage) return;
     const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-
-    let anchorRect: { top: number; left: number; width: number; height: number } | null = null;
-
-    const measure = () => {
-      const pinRectBox = pin.getBoundingClientRect();
-      const aRect = anchor.getBoundingClientRect();
-      anchorRect = {
-        top: aRect.top - pinRectBox.top,
-        left: aRect.left - pinRectBox.left,
-        width: aRect.width,
-        height: aRect.height,
-      };
-    };
-
-    const apply = (t: number) => {
-      if (!anchorRect) return;
-      const left = anchorRect.left * (1 - t);
-      const top = anchorRect.top * (1 - t);
-      const width = anchorRect.width + (window.innerWidth - anchorRect.width) * t;
-      const height = anchorRect.height + (window.innerHeight - anchorRect.height) * t;
-      focus.style.transform = `translate3d(${left}px, ${top}px, 0)`;
-      focus.style.width = `${width}px`;
-      focus.style.height = `${height}px`;
-      focus.style.borderRadius = `${8 * (1 - t)}px`;
-      cover.style.opacity = `${Math.max(0, 1 - t * 1.25)}`;
-    };
+    if (reduced) return;
 
     const update = () => {
-      const stackRectBox = stack.getBoundingClientRect();
-      const stackTop = stackRectBox.top + window.scrollY;
-      const distance = window.scrollY - stackTop;
-      const phase = window.innerHeight;
-      const progress = Math.max(0, Math.min(distance / phase, 1));
-      apply(progress);
+      const rect = stage.getBoundingClientRect();
+      const progress = Math.max(-1, Math.min(rect.top / window.innerHeight, 1));
+      stage.style.setProperty("--scroll-progress", String(progress));
     };
-
-    const ready = () => {
-      measure();
-      focus.style.opacity = "1";
-      update();
-    };
-
-    // Wait for fonts so the anchor's text-line position is stable.
-    if (document.fonts?.ready) {
-      document.fonts.ready.then(ready);
-    }
-    // Belt-and-suspenders: also fire on next frame in case fonts.ready resolved before mount.
-    requestAnimationFrame(ready);
-
-    const onResize = () => {
-      measure();
-      update();
-    };
-
-    if (!reduced) {
-      window.addEventListener("scroll", update, { passive: true });
-    }
-    window.addEventListener("resize", onResize);
-
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
     return () => {
       window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener("resize", update);
     };
   }, []);
 
   return (
-    <div ref={stackRef} className="y-cover-stack">
-      <div ref={pinRef} className="y-cover-pin">
-        <section
-          ref={coverRef}
-          className="y-cover"
-          aria-label="JEJU SAILING GRAND PRIX 2026"
-        >
-          <h1 className="y-cover__title">
-            <p className="y-cover__line" aria-label="JEJU SAILING">
-              <Letters text="JEJU" base={0} />
-              <span
-                className="y-cover__window"
-                style={{ animationDelay: "440ms" } as CSSProperties}
-              >
-                <video
-                  src={HERO_VIDEO_INLINE}
-                  poster="/assets/yacht/gallery-1.svg"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="auto"
-                  aria-hidden="true"
-                />
-              </span>
-              <Letters text="SAILING" base={620} />
-            </p>
-            <p className="y-cover__line" aria-label="GRAND PRIX">
-              <Letters text="GRAND" base={1180} />
-              <Letters text="PRIX" base={1560} />
-              <span
-                ref={anchorRef}
-                className="y-cover__window y-cover__window--anchor"
-                aria-hidden="true"
-              />
-            </p>
+    <section className="y-cover2" aria-label="JEJU SAILING GRAND PRIX 2026">
+      <div ref={stageRef} className="y-cover2__stage">
+        <div className="y-cover2__collage" aria-hidden="true">
+          {PANELS.map((panel) => (
+            <div className={panel.className} key={panel.className}>
+              <img src={panel.src} alt={panel.alt} loading="eager" />
+            </div>
+          ))}
+          {HOTSPOTS.map((h, i) => (
+            <button
+              key={i}
+              type="button"
+              className={`y-cover2__hotspot y-cover2__hotspot--${h.tone}`}
+              style={{ top: h.top, left: h.left }}
+              aria-label={h.label}
+            >
+              <span className="y-cover2__hotspot-dot" />
+              <span className="y-cover2__hotspot-caption">{h.label}</span>
+            </button>
+          ))}
+        </div>
+        <div className="y-cover2__copy">
+          <p className="y-cover2__eyebrow">JEJU SAILING GRAND PRIX 2026</p>
+          <h1 className="y-cover2__headline">
+            <span className="y-cover2__line">바람을 읽는 사람들의</span>
+            <span className="y-cover2__line">
+              <em>가장 푸른</em> 무대
+            </span>
           </h1>
-          <Link href="#details" className="y-scroll-cue" aria-label="아래로 스크롤">
-            SCROLL
-            <i />
-          </Link>
-        </section>
-        <div ref={focusRef} className="y-cover-focus" aria-hidden="true">
-          <video
-            src={HERO_VIDEO_FOCUS}
-            poster="/assets/yacht/gallery-3.svg"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-          />
+          <p className="y-cover2__lead">
+            2026.09.18 — 09.20 · 제주 한림항 & 이호테우 앞바다
+            <br />
+            세계 16개국 48팀이 펼치는 사흘간의 국제 세일링 그랑프리.
+          </p>
+          <div className="y-cover2__cta">
+            <Link href="/tickets" className="y-btn y-btn--primary">
+              관람권 예매
+            </Link>
+            <Link href="#about" className="y-btn y-btn--outline">
+              대회 소개 보기
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+      <Link href="#about" className="y-cover2__scroll" aria-label="아래로 스크롤">
+        <span className="y-cover2__scroll-text">SCROLL</span>
+        <span className="y-cover2__scroll-line" />
+      </Link>
+    </section>
   );
 }

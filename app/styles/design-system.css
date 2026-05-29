@@ -6,7 +6,9 @@
    ===================================================================== */
 
 .yacht {
-  /* color tokens — dark ocean theme (interior pages) */
+  /* color tokens — dark ocean theme (kept for tickets/checkout/complete
+     interior pages). The landing (.y-home) opts into the MYCEL palette
+     defined further down. */
   --y-ink: #eaf4f8;
   --y-ink-soft: #a7c2cf;
   --y-ink-dim: #6f8c99;
@@ -22,27 +24,44 @@
   --y-gold: #f3c14b;
   --y-coral: #ef7a5a;
   --y-aqua: #7ad6e6;
-  /* FLATTEN-style ocean-blue accent (landing redesign + header) */
-  --y-accent: #0b6fe8;
-  --y-accent-deep: #064aa0;
+  /* Main accent (now MYCEL deep-purple — used on landing + header + admin) */
+  --y-accent: #3617ce;
+  --y-accent-deep: #16096c;
+  --y-accent-hover: #2c149e;
+  --y-accent-soft: #8783ff;
+  /* MYCEL gray ramp (Tailwind-like) — used by .y-home and admin */
+  --y-gray-50: #f9fafb;
+  --y-gray-100: #f3f4f6;
+  --y-gray-200: #e5e7eb;
+  --y-gray-300: #d1d5db;
+  --y-gray-400: #9ca3af;
+  --y-gray-500: #6b7280;
+  --y-gray-600: #4b5563;
+  --y-gray-700: #374151;
+  --y-gray-800: #1f2937;
+  --y-gray-900: #111827;
   /* shape / scale tokens */
-  --y-radius: 18px;
-  --y-radius-lg: 26px;
+  --y-radius: 12px;
+  --y-radius-lg: 20px;
   --y-shadow: 0 26px 70px rgba(0, 0, 0, 0.45);
-  --y-maxw: 1200px;
+  --y-maxw: 1320px;
   --y-header-h: 76px;
+  /* MYCEL-style fluid gutters */
+  --y-gutter-sm: clamp(12px, 0.78vw + 9px, 24px);
+  --y-gutter-md: clamp(20px, 1.81vw + 13px, 48px);
+  --y-gutter-lg: clamp(36px, 2.33vw + 27px, 72px);
 
   color: var(--y-ink);
   background:
     radial-gradient(120% 80% at 80% -10%, rgba(35, 166, 196, 0.18), transparent 60%),
     radial-gradient(90% 70% at 0% 0%, rgba(15, 94, 122, 0.22), transparent 55%),
     var(--y-bg);
-  font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: Pretendard, Manrope, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
   min-height: 100vh;
   overflow-x: clip;
 }
 
-.yacht ::selection { background: var(--y-sea); color: #02131f; }
+.yacht ::selection { background: var(--y-accent); color: #fff; }
 
 /* ---------- Scroll reveal (driven by AosProvider) ---------- */
 .yacht [data-aos] {
