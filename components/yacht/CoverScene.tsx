@@ -1,110 +1,55 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 
-/* MYCEL-style cover hero.
-   – Five-panel image collage (LT / LB / CB / RT / RB).
-   – Headline overlaid at center with eyebrow + lead + CTA.
-   – Three "hotspots" (purple dots) with captions for editorial detail.
-   – On scroll-in: split-line reveal of the headline via CSS animation.
-*/
+/* MYCEL-style hero — full-screen autoplay video background with an
+   oversized English headline ("WIND BACK TO WIND"), a short body
+   subtitle and a mouse + "Scroll" cue at the bottom. Mirrors
+   `#hero.no-main__hero` from mycel.earth. */
 
-type Hotspot = {
-  top: string;
-  left: string;
-  label: string;
-  tone: "default" | "soft";
-};
-
-const PANELS = [
-  { className: "y-cover2__panel y-cover2__panel--lt", src: "/assets/yacht/gallery-2.svg", alt: "" },
-  { className: "y-cover2__panel y-cover2__panel--lb", src: "/assets/yacht/gallery-4.svg", alt: "" },
-  { className: "y-cover2__panel y-cover2__panel--cb", src: "/assets/yacht/gallery-1.svg", alt: "" },
-  { className: "y-cover2__panel y-cover2__panel--rt", src: "/assets/yacht/gallery-3.svg", alt: "" },
-  { className: "y-cover2__panel y-cover2__panel--rb", src: "/assets/yacht/gallery-5.svg", alt: "" },
-];
-
-const HOTSPOTS: Hotspot[] = [
-  { top: "26%", left: "18%", label: "한림항 출발", tone: "default" },
-  { top: "62%", left: "78%", label: "이호테우 피니시", tone: "default" },
-  { top: "44%", left: "52%", label: "메인 코스", tone: "soft" },
-];
+const HERO_VIDEO =
+  "https://assets.mixkit.co/videos/preview/mixkit-sailing-boat-crossing-the-ocean-7905-large.mp4";
 
 export function CoverScene() {
-  const stageRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
-  // Subtle parallax: as the user scrolls through the hero, panels drift
-  // at slightly different speeds. Editorial, not gimmicky.
+  // Make sure the video starts playing once it's loaded (some mobile
+  // browsers require an explicit play call even with autoplay+muted).
   useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
-    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) return;
-
-    const update = () => {
-      const rect = stage.getBoundingClientRect();
-      const progress = Math.max(-1, Math.min(rect.top / window.innerHeight, 1));
-      stage.style.setProperty("--scroll-progress", String(progress));
-    };
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
+    const video = ref.current?.querySelector<HTMLVideoElement>("video");
+    if (!video) return;
+    const tryPlay = () => video.play().catch(() => {});
+    tryPlay();
+    video.addEventListener("loadeddata", tryPlay, { once: true });
   }, []);
 
   return (
-    <section className="y-cover2" aria-label="JEJU SAILING GRAND PRIX 2026">
-      <div ref={stageRef} className="y-cover2__stage">
-        <div className="y-cover2__collage" aria-hidden="true">
-          {PANELS.map((panel) => (
-            <div className={panel.className} key={panel.className}>
-              <img src={panel.src} alt={panel.alt} loading="eager" />
-            </div>
-          ))}
-          {HOTSPOTS.map((h, i) => (
-            <button
-              key={i}
-              type="button"
-              className={`y-cover2__hotspot y-cover2__hotspot--${h.tone}`}
-              style={{ top: h.top, left: h.left }}
-              aria-label={h.label}
-            >
-              <span className="y-cover2__hotspot-dot" />
-              <span className="y-cover2__hotspot-caption">{h.label}</span>
-            </button>
-          ))}
-        </div>
-        <div className="y-cover2__copy">
-          <p className="y-cover2__eyebrow">JEJU SAILING GRAND PRIX 2026</p>
-          <h1 className="y-cover2__headline">
-            <span className="y-cover2__line">바람을 읽는 사람들의</span>
-            <span className="y-cover2__line">
-              <em>가장 푸른</em> 무대
-            </span>
-          </h1>
-          <p className="y-cover2__lead">
-            2026.09.18 — 09.20 · 제주 한림항 & 이호테우 앞바다
-            <br />
-            세계 16개국 48팀이 펼치는 사흘간의 국제 세일링 그랑프리.
-          </p>
-          <div className="y-cover2__cta">
-            <Link href="/tickets" className="y-btn y-btn--primary">
-              관람권 예매
-            </Link>
-            <Link href="#about" className="y-btn y-btn--outline">
-              대회 소개 보기
-            </Link>
+    <section id="hero" className="y-mhero" ref={ref}>
+      <div className="y-mhero__video">
+        <video autoPlay muted loop playsInline preload="auto">
+          <source src={HERO_VIDEO} type="video/mp4" />
+        </video>
+        <div className="y-mhero__veil" aria-hidden="true" />
+        <hgroup className="y-mhero__title">
+          <div className="y-mhero__inner">
+            <h1 className="y-mhero__h font-en">
+              <span className="y-mhero__word">WIND</span>{" "}
+              <span className="y-mhero__word">BACK</span>{" "}
+              <span className="y-mhero__word">TO</span>{" "}
+              <span className="y-mhero__word">WIND</span>
+            </h1>
+            <p className="y-mhero__sub">
+              A sailing grand prix from harbor to horizon.
+              <br />
+              제주 한림항에서 이호테우까지, 사흘간의 항해.
+            </p>
           </div>
+        </hgroup>
+        <div className="y-mhero__scroll" aria-hidden="true">
+          <span className="y-mhero__scroll-mouse" />
+          <span className="y-mhero__scroll-text">Scroll</span>
         </div>
       </div>
-      <Link href="#about" className="y-cover2__scroll" aria-label="아래로 스크롤">
-        <span className="y-cover2__scroll-text">SCROLL</span>
-        <span className="y-cover2__scroll-line" />
-      </Link>
     </section>
   );
 }

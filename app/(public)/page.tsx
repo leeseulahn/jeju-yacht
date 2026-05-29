@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { ClosingVideo } from "@/components/yacht/ClosingVideo";
+import { CollageFinale } from "@/components/yacht/CollageFinale";
 import { Countdown } from "@/components/yacht/Countdown";
 import { CoverScene } from "@/components/yacht/CoverScene";
 import { TicketCard } from "@/components/yacht/TicketCard";
@@ -33,8 +35,11 @@ export default function YachtLandingPage() {
 
   return (
     <div className="y-home">
-      {/* ============================ COVER ============================ */}
+      {/* ============================ COVER (full-screen video) ============================ */}
       <CoverScene />
+
+      {/* ============================ COLLAGE FINALE ============================ */}
+      <CollageFinale />
 
       {/* ============================ DETAILS ============================ */}
       <section className="y-block y-block--light y-details" id="details">
@@ -268,6 +273,9 @@ export default function YachtLandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ============================ CLOSING VIDEO ============================ */}
+      <ClosingVideo />
 
       {/* ============================ CTA (dark) ============================ */}
       <section className="y-block y-block--dark y-cta" data-nav-dark>
